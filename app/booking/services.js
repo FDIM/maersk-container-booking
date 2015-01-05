@@ -280,41 +280,42 @@ angular.module('mcb.booking.services', [])
                     var d = $q.defer();
                     setTimeout(function () {
                         // create a list of random dates and random prices
-
                         var res = [];
-                        var partialRes = [];
-                        var date = new Date(departureDate);
-                        var fn = function () {
-                            //randomize array
-                            partialRes.shuffle();
-                            //take 1-3 elements from the array and create dummy record
-                            for (var i = 0; i < 1 + 2 * Math.random() && i < partialRes.length; i++) {
-                                res.push({
-                                    date: partialRes[i],
-                                    price: (1000 + 2000 * Math.random()) * quantity,
-                                    quantity: quantity,
-                                    commodity: commodity,
-                                    origin: origin,
-                                    destination: destination,
-                                    departureDate: departureDate,
-                                    arrivalDate: arrivalDate
-                                });
+                        if((arrivalDate - departureDate)/(60*60*1000)>=24){
+                            var partialRes = [];
+                            var date = new Date(departureDate);
+                            var fn = function () {
+                                //randomize array
+                                partialRes.shuffle();
+                                //take 1-3 elements from the array and create dummy record
+                                for (var i = 0; i < 1 + 2 * Math.random() && i < partialRes.length; i++) {
+                                    res.push({
+                                        date: partialRes[i],
+                                        price: (1000 + 2000 * Math.random()) * quantity,
+                                        quantity: quantity,
+                                        commodity: commodity,
+                                        origin: origin,
+                                        destination: destination,
+                                        departureDate: departureDate,
+                                        arrivalDate: arrivalDate
+                                    });
+                                }
+                                partialRes = [];
                             }
-                            partialRes = [];
-                        }
-                        while (date <= arrivalDate) {
-                            // collect dates in partial list of 7, then take 2 or 3 random ones and put them to the result
-                            if (partialRes.length == 7) {
+                            while (date <= arrivalDate) {
+                                // collect dates in partial list of 7, then take 2 or 3 random ones and put them to the result
+                                if (partialRes.length == 7) {
+                                    fn();
+                                } else {
+                                    partialRes.push(new Date(date));
+                                }
+                                // go through each day between two dates
+                                date.setDate(date.getDate() + 1);
+                            }
+                            //deal with remaining days
+                            if (partialRes.length > 0) {
                                 fn();
-                            } else {
-                                partialRes.push(new Date(date));
                             }
-                            // go through each day between two dates
-                            date.setDate(date.getDate() + 1);
-                        }
-                        //deal with remaining days
-                        if (partialRes.length > 0) {
-                            fn();
                         }
                         d.resolve(res);
                     }, globalTimeout);
