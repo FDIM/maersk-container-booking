@@ -7138,6 +7138,8 @@ main.loading:after {
   outline: none;
   transition: all 0.25s ease-in;
   background-color: #69b8d6;
+  margin-bottom: -59px;
+  padding-top: 8px;
 }
 #booking .btn.btn-search:before {
   display: block;
@@ -7344,6 +7346,8 @@ main.loading:after {
   transition: all 0.25s ease-in;
   background-color: #5cb85c;
   padding: 5px;
+  margin-bottom: -44px;
+  padding-top: 5px;
 }
 #booking .results-container .prompt-dialog .btn.btn-confirm:before {
   display: block;
@@ -7446,6 +7450,7 @@ main.loading:after {
   transition: all 0.25s ease-in;
   background-color: #5cb85c;
   padding: 5px;
+  margin-bottom: -66px;
 }
 #booking .confirmation-container .btn.btn-book:before {
   display: block;
