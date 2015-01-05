@@ -1,0 +1,307 @@
+.common-transition{
+    transition: all 0.25s ease-in;
+    transition-property: opacity, transform;
+    transform: scale(1);
+    opacity: 1;
+    &.hidden{
+        display: inherit !important;
+        transform: scale(0.01);
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        padding: 0;
+        margin: 0 auto;
+    }
+}
+.round-button{
+    display: block;
+        padding: 10px;
+        border-radius: 100%;
+        margin-top: 10px;
+        background-color: #5cb85c;
+        color: #fff;
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        margin-bottom: -55px;
+        margin-top: 20px;
+        position: relative;
+        box-shadow: none !important;
+        z-index: 2;
+        outline: none;
+        transition: all 0.25s ease-in;
+        &:before {
+            display: block;
+            content: ' ';
+            position: absolute;
+            top: -@searchButtonBorder/3;
+            left: -@searchButtonBorder/3;
+            bottom: -@searchButtonBorder/3;
+            right: -@searchButtonBorder/3;
+            background: #fff;
+            opacity: 0.2;
+            border-radius: 100%;
+            transition: all 0.25s ease-in;
+            z-index: 1;
+        }
+
+        &:active:before, &:hover:before {
+            opacity: 0.3;
+            top: -@searchButtonBorder;
+            left: -@searchButtonBorder;
+            bottom: -@searchButtonBorder;
+            right: -@searchButtonBorder;
+        }
+        &:after{
+            background-size: 70px;
+        }
+        &[disabled]{
+            background: #eeeeee;
+            opacity: 1;
+            color:#555555;
+        }
+}
+// booking view specific rules
+#booking {
+    .search-container {
+        .container-style();
+        .common-transition();
+        margin: 0 auto;
+        position: relative;
+        margin-bottom: 50px;
+        z-index: 5;
+        input[readonly]{
+            cursor: default;
+            background: #fff;
+        }
+        .row {
+            margin: 0 -10px;
+            &>div{
+                padding: 0;
+                @media screen and (max-width:@screen-xss-min){
+                    >div:first-child{
+                        margin-bottom: 15px;
+                    }
+                }
+                >div{    
+                    margin:5px 0px;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+            }
+        }
+        // datepicker fix for desktop/tablet
+        @media screen and (min-width: @screen-xss-min){
+            .fix-date-picker{
+                .dropdown-menu{
+                    padding: 5px;
+                    table{
+                        outline: none;   
+                    }
+                }
+                .left{
+                    .dropdown-menu{
+                        left:0px !important;
+                        top:inherit !important;
+                        bottom: 33px;
+                    }
+                }
+                .right{
+                    .dropdown-menu{
+                        left:inherit!important;
+                        top:inherit !important;
+                        bottom: 33px;
+                        right:0px;
+                    }
+                }
+                }
+            }
+        }
+        // datepicker fix for mobile
+        @media screen and (max-width: @screen-xss-min){
+            .fix-date-picker{
+                .dropdown-menu{
+                    left:0px !important;
+                    top:inherit!important;
+                    bottom: 33px;
+                    width: 100%;
+                    padding: 5px;
+                    table{
+                        width: 100%;
+                        outline: none;
+                    }
+                }
+                    
+            }
+        }
+        .btn.btn-search {
+            .round-button();
+            background-color: #69b8d6;
+        }
+    
+
+    .results-container {
+        margin-top: 75px;
+        position: relative;
+        padding: 0;
+        .common-transition();
+        .header{
+            .container-style();
+            margin-bottom: 8px;
+            padding-bottom: 0;
+            h3{
+                border: 0;
+                margin: 0;
+                padding: 0;
+            }
+            .filter{
+                float: right;
+                label{
+                    font-weight: normal;
+                    margin-left: 5px;
+                }
+                input{
+                    float: left;
+                }
+            }
+        }
+        .results-list{
+            position: relative;
+            overflow: hidden;
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                li {
+                    position: relative;
+                    padding: 0;
+                    >div{
+                        .container-style();
+                        transition: all 0.25s ease-in;
+                        cursor: pointer;
+                        margin: 4px;
+                        padding: 0px;
+                        position: relative;
+                        .date{
+                            display: block;
+                            padding: 8px;
+                            text-align: center;
+                            width: 50%;
+                        }
+                        .price { 
+                            display: block;
+                            background: #67b54d;
+                            color:#fff;
+                            padding: 8px;
+                            transition: inherit;
+                            text-align: center;
+                            width: 50%;
+                            position: absolute;
+                            top:0;
+                            right: 0;
+                        }
+                        &:before{
+                            position: absolute;
+                            top: 50%;
+                            left:50%;
+                            content: ' ';
+                            display: block;
+                            width: 0;
+                            height: 0;
+                            margin-top: -4px;
+                            border-style: solid;
+                            border-width: 4px 0 4px 6.9px;
+                            border-color: transparent transparent transparent #ffffff;
+                            transition: all 0.25s ease-in;
+                            z-index: 1;
+                        }
+                        &.active:before, &:hover:before{
+                            border-color: transparent transparent transparent #69b8d6;
+                        }
+                        &.active, &:hover{
+                            color:#fff;
+                            background-color: #69b8d6;
+                            .price{
+                                background-color: #fff;
+                                color:#333333;
+                            }
+
+                        }
+
+                    }
+                }
+                @media screen and (min-width: @screen-xss-min){
+                    margin: -4px; // compensate margin on li element
+                    li{
+                        >div{
+                            .date, .price{
+                                width:100%;
+                            }
+                            .price{
+                                position: static;
+                                right:inherit;
+                                top:inherit;
+                            }
+                            &:before{
+                                margin-top: 0px;
+                                border-width:  6.9px 4px 0 4px;
+                                border-color: #ffffff transparent transparent transparent;
+                            }
+                            &.active:before, &:hover:before{
+                                border-color: #69b8d6 transparent transparent transparent;
+                            }
+                        }
+                    }
+                }   
+            }
+        }
+        .prompt-dialog{
+            .container-style();
+            .common-transition();
+            padding: 5px;
+            text-align: center;
+            margin-top: 30px;
+            position: relative;
+            padding-top: 30px;
+            margin-bottom: 60px;
+            .btn.btn-confirm {
+                .round-button();
+                background-color: #5cb85c;
+                padding: 5px;
+            }
+            .close{
+                position: absolute;
+                top: 5px;
+                right: 5px;
+            }
+        }
+        .error {
+            padding-top: 40px;
+            text-align: center;
+            color: #fff;
+        }
+    }
+    .confirmation-splash-container{
+        .loading();
+        .common-transition();
+        width: 200px;
+        margin: 0 auto;
+        padding-top: 110px;
+        text-align: center;
+        color: #fff;
+        &:after{
+            background-size: 70px;
+        }
+    }
+    .confirmation-container{
+        .container-style();
+        .common-transition();
+        max-width: 450px;
+        margin:0 auto;
+        .btn.btn-book {
+            .round-button();
+            background-color: #5cb85c;
+            padding: 5px;
+        }
+    }
+}

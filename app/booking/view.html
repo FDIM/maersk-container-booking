@@ -1,0 +1,99 @@
+<div id="booking" ng-class="{'has-results':results}">
+    <div ng-controller="SearchCtrl" class="container search-container" ng-class="{hidden:bookedAllotment || booking }">
+        <h2>Book a shipment</h2>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="col-xss-12 col-xs-6 col-sm-12 col-lg-6">
+                    <label for="search-commodity">Commodity</label>
+                    <select no-results-text="'Please wait'" ng-model="commodity" chosen data-placeholder="Choose commodity" ng-options="com.name for com in commodities | orderBy:+name " class="form-control" id="search-commodity">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-xss-12 col-xs-6 col-sm-12 col-lg-6">
+                    <label for="search-quantity">Quantity</label>
+                    <div class="input-group">
+                        <input ng-model="quantity" onfocus="this.select();" type="text" class="form-control" id="search-quantity" />
+                        <span class="input-group-addon">container{{quantity.lastIndexOf('1')!=quantity.length-1 || (quantity.length > 1 && quantity.lastIndexOf('11')==quantity.length-2)?'s':''}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4">
+                <div class="col-xss-12 col-xs-6 col-sm-12 col-lg-6">
+                    <label for="search-origin">From</label>
+                    <select no-results-text="'Please wait'" chosen data-placeholder="Choose origin" ng-model="origin" ng-options="dest.name group by dest.region for dest in destinations | orderBy:['+region','+name']" class="form-control" id="search-origin">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="col-xss-12 col-xs-6 col-sm-12 col-lg-6">
+                    <label for="search-destination">To</label>
+                    <select no-results-text="'Please wait'" chosen data-placeholder="Choose destination" ng-model="destination" ng-options="dest.name group by dest.region for dest in destinations | orderBy:['+region','+name']" class="form-control" id="search-destination">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 fix-date-picker">
+                <div class="col-xss-12 col-xs-6 col-sm-12 col-lg-6">
+                    <label for="search-departure-date">Earliest departure</label>
+                    <div class="input-group left">
+                        <input readonly id="search-departure-date" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="departureDate" show-button-bar="false" is-open="departureDatePickerVisible" min-date="minDate" max-date="maxDate" ng-focus="showDepartureDatePicker($event)" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                        <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="showDepartureDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                    </div>
+                </div>
+                <div class="col-xss-12 col-xs-6 col-sm-12 col-lg-6">
+                    <label for="search-arrival-date">Latest arrival</label>
+                    <div class="input-group right">
+                        <input readonly id="search-arrival-date" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="arrivalDate" show-button-bar="false" is-open="arrivalDatePickerVisible" min-date="departureDate" max-date="maxDate" ng-focus="showArrivalDatePicker($event)" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                        <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="showArrivalDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <button ng-click="search($event, quantity, commodity, origin, destination, departureDate, arrivalDate)" class="btn btn-search" ng-disabled="!(quantity && commodity && origin && destination && departureDate && arrivalDate) || (origin && destination && origin.name == destination.name)" ng-class="{loading:searching}">Search</button>
+    </div>
+    <div ng-controller="ResultsCtrl" class="container results-container" ng-class="{'hidden':!results || bookedAllotment || booking}">
+        <div class="header clearfix" ng-class="{hidden:results.length==0}">
+            <h3>Latest arrival dates with prices</h3>
+            <div class="filter"><input type="checkbox" id="search-results-cheapest-first" ng-model="cheapestFirst"/><label for="search-results-cheapest-first">Cheapest first</label></div>
+        </div>
+        <div ng-class="{hidden:results.length==0}" class="results-list clearfix">
+            <ul>
+                <li ng-repeat="item in results | orderBy:(cheapestFirst?'+price':'+date')" ng-click="prompt($event, item)" class="col-xss-12 col-xs-4 col-sm-3 col-md-2 col-lg-2">
+                    <div ng-class="{active:pendingAllotment == item}">
+                        <span class="date">{{item.date | date:format}}</span>
+                        <span class="price">{{item.price | currency}}</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="prompt-dialog" ng-class="{hidden:!pendingAllotment}">
+            <p>Confirm shipment to be delivered to <b>{{pendingAllotment.destination.name}}</b>, no later than <b>{{pendingAllotment.date | date:format}}</b> for <b>{{pendingAllotment.price | currency}}</b>?
+            </p>
+            <span class="glyphicon glyphicon-remove close" ng-click="cancel()"></span>
+            <button class="btn btn-confirm" ng-click="book($event, pendingAllotment)">Confirm</button>
+        </div>
+        <p class="error" ng-class="{hidden:!results || results.length>0}">
+            Unfortunately shipment cannot be fullfilled within chosen timeframe
+        </p>
+    </div>
+
+    <div class="confirmation-splash-container" ng-class="{hidden:!booking}">
+        <p>Please wait...</p>
+    </div>
+    <div class="confirmation-container" ng-class="{hidden:!bookedAllotment}">
+        <h2>Confirmation</h2>
+        <p>Your shipment of {{bookedAllotment.quantity}} container{{bookedAllotment.quantity.lastIndexOf('1')!=bookedAllotment.quantity.length-1 || (bookedAllotment.quantity.length > 1 && bookedAllotment.quantity.lastIndexOf('11')==bookedAllotment.quantity.length-2)?'s':''}} with {{bookedAllotment.commodity.name}} from <b>{{bookedAllotment.origin.name}}</b> is now confirmed.
+        </p>
+        <p>It will be available for distribution in <b>{{bookedAllotment.destination.name}}</b> no later than {{bookedAllotment.date | date:format}} provided that invoice is fullfilled.</p>
+        <p>An email with additional information and invoice will be delivered shortly.</p>
+
+        <p>
+            <button class="btn btn-book" ng-click="reset()">Book again</button>
+        </p>
+    </div>
+</div>

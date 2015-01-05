@@ -1,0 +1,148 @@
+@mobileWidth: 480px;
+@searchButtonBorder: 30px;
+@input-bg: #fff;
+@input-border: 1px;
+@screen-xss-min: @mobileWidth;
+// include bootstrap
+@import '../bower_components/bootstrap/less/bootstrap.less';
+// aditional styles
+@import '../bower_components/bootstrap-chosen/bootstrap-chosen.less';
+
+
+.container-style {
+    background: #fff;
+    padding: 18px;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.15);
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+h1,h2,h3,h4,h5,h6{
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #303030;
+    margin-top: 0px;
+    border-bottom: 2px dotted #eee;
+    padding-bottom: 10px;
+}
+body {
+    font-family: 'Lato', sans-serif;
+    min-height: 100%;
+    background-color: #e5e8e9;
+}
+.loading{
+    position: relative;
+    &:after{
+        background: url('loading.svg') no-repeat center center;
+        display: block;
+        position: absolute;
+        top:0;
+        left:0;
+        bottom: 0;
+        right: 0;
+        content: ' ';
+    }
+}
+/* fix for ie */
+@keyframes rotate {
+    from {transform: rotate(0);}
+    to {transform: rotate(360);}
+}
+.no-smil{
+    .loading{
+        &:after{
+           animation: rotate 1s; 
+        }
+    }
+}
+header {
+    z-index: 2;
+    position: relative;
+    padding: 8px;
+    background-color: #fff;
+    box-shadow: 0 3px 3px 1px rgba(0, 0, 0, 0.15);
+    .container{
+        padding: 0;
+    }
+    a.brand {
+        display: block;
+        padding-left: 30px;
+        background: url("maersk-icon.png") no-repeat center left;
+        background-size: contain;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: #000;
+    }
+    @media screen and (min-width: @screen-xss-min) {
+        padding: 14px;
+
+        a.brand {
+            padding-left: 38px;
+            height: 30px;
+            font-size: 18px;
+            padding-top: 2px;
+        }
+    }
+    @media screen and (min-width: @screen-sm-min) {
+        padding: 21px;
+
+        a.brand {
+            padding-left: 48px;
+            height: 40px;
+            font-size: 24px;
+            padding-top: 2px;
+        }
+    }
+}
+
+main {
+    background: url(map.jpg) no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
+    height: ~"calc(100vh - 36px)";
+    padding: 30px 0;
+    &.loading{
+        &:after{
+            background-size: 70px;
+        }
+    }
+    @media screen and (min-width: @screen-xss-min) { height: ~"calc(100vh - 58px)"; }
+    @media screen and (min-width: @screen-sm-min) { height: ~"calc(100vh - 82px)"; }
+}
+
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.vcenter {
+    display: table;
+    width: 100%;
+
+    >div {
+        display: table-row;
+
+        >div {
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+}
+// fix for chosen
+.chosen-container{
+    width: 100% !important;
+    &.chosen-container-single .chosen-single{
+        position: static;
+    }
+}
+// create additional extra small grid
+//
+// Columns, offsets, pushes, and pulls for the small device range, from phones
+// to tablets.
+
+@media (max-width: @screen-xss-min) {
+  .make-grid(xss);
+}
+
+// extra imports
+@import "../booking/style.less";
