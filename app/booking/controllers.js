@@ -108,6 +108,11 @@ angular.module('mcb.booking.controllers', ['ngRoute'])
                 $scope.arrivalDatePickerVisible = true;
             };
             $scope.$watch('quantity', function () {
+                if (/\D/g.test($scope.quantity))
+                {
+                    // Filter non-digits from input value.
+                    $scope.quantity = $scope.quantity.replace(/\D/g, '');
+                }
                 if ($scope.quantity > service.getMaxNumberOfContainers()) {
                     $scope.quantity = service.getMaxNumberOfContainers();
                 } else if ($scope.quantity < 1) {
