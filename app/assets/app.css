@@ -6727,16 +6727,18 @@ body {
   content: ' ';
 }
 /* fix for ie */
-@keyframes rotate {
-  from {
-    transform: rotate(0);
+@keyframes simple-rotate {
+  0% {
+    transform: rotate(0deg);
   }
-  to {
-    transform: rotate(360);
+  100% {
+    transform: rotate(360deg);
   }
 }
 .no-smil .loading:after {
-  animation: rotate 1s;
+  -webkit-animation: simple-rotate 1s;
+  animation: simple-rotate 1s;
+  animation-iteration-count: infinite;
 }
 header {
   z-index: 2;
@@ -7384,7 +7386,6 @@ main.loading:after {
   color: #fff;
 }
 #booking .confirmation-splash-container {
-  position: relative;
   transition: all 0.25s ease-in;
   transition-property: opacity, transform;
   transform: scale(1);
@@ -7394,16 +7395,6 @@ main.loading:after {
   padding-top: 110px;
   text-align: center;
   color: #fff;
-}
-#booking .confirmation-splash-container:after {
-  background: url('loading.svg') no-repeat center center;
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  content: ' ';
 }
 #booking .confirmation-splash-container.hidden {
   display: inherit !important;
